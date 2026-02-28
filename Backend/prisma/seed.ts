@@ -28,6 +28,12 @@ const prisma = new PrismaClient({ adapter });
 async function main() {
     console.log('🌱 Seeding database...');
 
+    const existingCount = await prisma.status.count();
+    if (existingCount > 0) {
+        console.log('⏭️  Database already seeded, skipping...');
+        return;
+    }
+
     // ─── Status ───────────────────────────────────────────────────────────────
     const statuses = await prisma.status.createManyAndReturn({
         data: [
