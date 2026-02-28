@@ -1,0 +1,433 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+}
+
+model Project {
+    id          Int      @id @default(autoincrement())
+    title       String   @unique
+    descriptionShort String
+    descriptionLong  String
+    startedAt   DateTime
+    enabled     Boolean  @default(true)
+
+    statusId    Int
+    
+    githubUrl   String?
+    liveUrl     String?
+    mainProjectMediaId Int?
+    endAt       DateTime?
+
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+    
+    status      Status   @relation(fields: [statusId], references: [id])
+    mainMedia   Media?   @relation("ProjectMainMedia", fields: [mainProjectMediaId], references: [id])
+
+    projectMedias ProjectMedia[]
+    projectTechStacks ProjectTechStack[]
+    projectSkills ProjectSkill[]
+
+    @@index([statusId])
+    @@index([mainProjectMediaId])
+}
+
+model Experience {
+    id          Int      @id @default(autoincrement())
+    title       String   @unique
+    descriptionShort String
+    descriptionLong  String
+    startedAt   DateTime
+    enabled     Boolean  @default(true)
+
+    companyId   Int
+    statusId    Int
+    jobTypeId    Int
+
+    mainExperienceMediaId Int?
+    endAt       DateTime?
+
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    company     Company  @relation(fields: [companyId], references: [id])
+    status      Status   @relation(fields: [statusId], references: [id])
+    jobType     JobType  @relation(fields: [jobTypeId], references: [id])
+    mainMedia   Media?   @relation("ExperienceMainMedia", fields: [mainExperienceMediaId], references: [id])
+
+    experienceMedias ExperienceMedia[]
+    experienceTechStacks ExperienceTechStack[]
+    experienceSkills ExperienceSkill[]
+
+    @@index([statusId])
+    @@index([companyId])
+    @@index([jobTypeId])
+    @@index([mainExperienceMediaId])
+}
+
+model Education {
+    id          Int      @id @default(autoincrement())
+    title       String   @unique
+    descriptionShort String
+    descriptionLong  String
+    startedAt   DateTime
+    enabled     Boolean  @default(true)
+
+    statusId    Int
+    schoolId    Int
+    degreeId    Int
+
+    mainEducationMediaId Int?
+    endAt       DateTime?
+
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    school      School   @relation(fields: [schoolId], references: [id])
+    degree      Degree   @relation(fields: [degreeId], references: [id])
+    status      Status   @relation(fields: [statusId], references: [id])
+    mainMedia   Media?   @relation("EducationMainMedia", fields: [mainEducationMediaId], references: [id])
+
+    educationMedias EducationMedia[]
+    educationTechStacks EducationTechStack[]
+    educationSkills EducationSkill[]
+
+    @@index([statusId])
+    @@index([schoolId])
+    @@index([degreeId])
+    @@index([mainEducationMediaId])
+}
+
+model News {
+    id          Int      @id @default(autoincrement())
+    title       String   @unique
+    descriptionShort String
+    descriptionLong  String
+    publishedAt DateTime
+    enabled     Boolean  @default(true)
+
+    mainNewsMediaId Int?
+
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    mainMedia Media?  @relation("NewsMainMedia", fields: [mainNewsMediaId], references: [id])
+
+    newsMedias NewsMedia[]
+
+    @@index([mainNewsMediaId])
+}
+
+model NewsMedia {
+    id        Int      @id @default(autoincrement())
+    newsId    Int
+    mediaId   Int
+
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    news      News   @relation(fields: [newsId], references: [id])
+    media     Media  @relation(fields: [mediaId], references: [id])
+
+    @@unique([newsId, mediaId])
+    @@index([mediaId])
+}
+
+model EducationTechStack {
+    id              Int      @id @default(autoincrement())
+    educationId   Int
+    techStackId   Int
+
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    education Education @relation(fields: [educationId], references: [id])
+    techStack  TechStack  @relation(fields: [techStackId], references: [id])
+
+    @@unique([educationId, techStackId])
+    @@index([techStackId])
+}
+
+model EducationSkill {
+    id          Int      @id @default(autoincrement())
+    educationId   Int
+    skillId       Int
+
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    education Education @relation(fields: [educationId], references: [id])
+    skill      Skill      @relation(fields: [skillId], references: [id])
+
+    @@unique([educationId, skillId])
+    @@index([skillId])
+}
+
+model EducationMedia {
+    id            Int      @id @default(autoincrement())
+    educationId   Int
+    mediaId       Int
+
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    education Education @relation(fields: [educationId], references: [id])
+    media      Media      @relation(fields: [mediaId], references: [id])
+
+    @@unique([educationId, mediaId])
+    @@index([mediaId])
+}
+
+model School {
+    id          Int      @id @default(autoincrement())
+    name        String   @unique
+    description String
+    websiteUrl  String
+
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    educations  Education[]
+}
+
+model ExperienceTechStack {
+    id              Int      @id @default(autoincrement())
+    experienceId   Int
+    techStackId   Int
+
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    experience Experience @relation(fields: [experienceId], references: [id])
+    techStack  TechStack  @relation(fields: [techStackId], references: [id])
+
+    @@unique([experienceId, techStackId])
+    @@index([techStackId])
+}
+
+model ExperienceSkill {
+    id          Int      @id @default(autoincrement())
+    experienceId   Int
+    skillId       Int
+
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    experience Experience @relation(fields: [experienceId], references: [id])
+    skill      Skill      @relation(fields: [skillId], references: [id])
+
+    @@unique([experienceId, skillId])
+    @@index([skillId])
+}
+
+model ExperienceMedia {
+    id            Int      @id @default(autoincrement())
+    experienceId   Int
+    mediaId       Int
+
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    experience Experience @relation(fields: [experienceId], references: [id])
+    media      Media      @relation(fields: [mediaId], references: [id])
+
+    @@unique([experienceId, mediaId])
+    @@index([mediaId])
+}
+
+model Company {
+    id          Int      @id @default(autoincrement())
+    name        String   @unique
+    description String
+    websiteUrl  String
+
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    experiences  Experience[]
+}
+
+model ProjectMedia {
+    id        Int      @id @default(autoincrement())
+    projectId Int
+    mediaId   Int
+
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    project   Project @relation(fields: [projectId], references: [id])
+    media     Media   @relation(fields: [mediaId], references: [id])
+
+    @@unique([projectId, mediaId])
+    @@index([mediaId])
+}
+
+model ProjectTechStack {
+    id          Int      @id @default(autoincrement())
+    projectId   Int
+    techStackId Int
+
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    project     Project   @relation(fields: [projectId], references: [id])
+    techStack   TechStack @relation(fields: [techStackId], references: [id])
+
+    @@unique([projectId, techStackId])
+    @@index([techStackId])
+}
+
+model ProjectSkill {
+    id          Int      @id @default(autoincrement())
+    projectId   Int
+    skillId     Int
+
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    project     Project @relation(fields: [projectId], references: [id])
+    skill       Skill   @relation(fields: [skillId], references: [id])
+
+    @@unique([projectId, skillId])
+    @@index([skillId])
+}
+
+model TechStack {
+    id        Int      @id @default(autoincrement())
+    name      String   @unique
+    iconUrl   String
+    color     String
+    categoryId Int
+
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    category    TechStackCategory @relation(fields: [categoryId], references: [id])
+
+    projectTechStacks ProjectTechStack[]
+    experienceTechStacks ExperienceTechStack[]
+    educationTechStacks EducationTechStack[]
+
+    @@index([categoryId])
+}
+
+model Skill {
+    id          Int      @id @default(autoincrement())
+    name        String   @unique
+    iconUrl     String
+    color       String
+    description String
+
+    categoryId  Int
+    levelId     Int
+
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    category    SkillCategory @relation(fields: [categoryId], references: [id])
+    level       SkillLevel    @relation(fields: [levelId], references: [id])
+
+    projectSkills ProjectSkill[]
+    experienceSkills ExperienceSkill[]
+    educationSkills EducationSkill[]
+
+    @@index([categoryId])
+    @@index([levelId])
+}
+
+model TechStackCategory {
+    id          Int      @id @default(autoincrement())
+    name        String   @unique
+    description String
+
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    techStacks  TechStack[]
+}
+
+model SkillCategory {
+    id          Int      @id @default(autoincrement())
+    name        String   @unique
+    description String
+
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    skills  Skill[]
+}
+
+model SkillLevel {
+    id          Int      @id @default(autoincrement())
+    name        String   @unique
+    description String
+
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    skills  Skill[]
+}
+
+model Media {
+    id        Int       @id @default(autoincrement())
+    url       String
+    type      MediaType
+    altText   String
+
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    projectMedias ProjectMedia[]
+    experienceMedias ExperienceMedia[]
+    educationMedias EducationMedia[]
+    newsMedias NewsMedia[]
+
+    mainProjects    Project[]    @relation("ProjectMainMedia")
+    mainExperiences Experience[] @relation("ExperienceMainMedia")
+    mainEducations  Education[]  @relation("EducationMainMedia")
+    mainNews        News[]       @relation("NewsMainMedia")
+}
+
+model Status {
+    id          Int      @id @default(autoincrement())
+    name        String   @unique
+    description String
+
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    projects    Project[]
+    experiences Experience[]
+    educations  Education[]
+}
+
+model JobType {
+    id          Int      @id @default(autoincrement())
+    name        String   @unique
+    description String
+
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    experiences Experience[]
+}
+
+model Degree {
+    id          Int      @id @default(autoincrement())
+    name        String   @unique
+    description String
+
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    educations Education[]
+}
+
+enum MediaType {
+    IMAGE
+    VIDEO
+    DOCUMENT
+}

@@ -1,0 +1,79 @@
+/* Shared detail page styles — used by ExperienceDetail, EducationDetail, NewsDetail */
+
+.detail-page__header {
+    padding-bottom: 2rem;
+}
+
+.detail-page__meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.detail-page__date {
+    font-size: 0.875rem;
+    color: var(--color-text-tertiary);
+}
+
+.detail-page__title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--color-text);
+    line-height: 1.15;
+}
+
+.detail-page__subtitle {
+    margin-top: 0.75rem;
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+}
+
+.detail-page__external-link {
+    color: var(--color-accent);
+    text-decoration: none;
+}
+
+.detail-page__external-link:hover {
+    text-decoration: underline;
+}
+
+.detail-page__hero-image {
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 2.5rem;
+    border: 1px solid var(--color-border);
+}
+
+.detail-page__hero-image img {
+    width: 100%;
+    display: block;
+}
+
+.detail-page__content {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    line-height: 1.75;
+    max-width: 720px;
+    margin-bottom: 3rem;
+    white-space: pre-wrap;
+}
+
+.detail-page__section {
+    margin-bottom: 2.5rem;
+}
+
+.detail-page__section-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 1rem;
+}
+
+@media (max-width: 640px) {
+    .detail-page__title {
+        font-size: 1.75rem;
+    }
+}

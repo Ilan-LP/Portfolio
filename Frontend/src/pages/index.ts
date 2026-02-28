@@ -1,0 +1,12 @@
+export { default as Home } from './Home.tsx';
+export { default as Projects } from './Projects.tsx';
+export { default as ProjectDetail } from './ProjectDetail.tsx';
+export { default as Skills } from './Skills.tsx';
+export { default as Experiences } from './Experiences.tsx';
+export { default as ExperienceDetail } from './ExperienceDetail.tsx';
+export { default as Education } from './Education.tsx';
+export { default as EducationDetail } from './EducationDetail.tsx';
+export { default as News } from './News.tsx';
+export { default as NewsDetail } from './NewsDetail.tsx';
+export { default as Contact } from './Contact.tsx';
+export { default as NotFound } from './NotFound.tsx';

@@ -1,0 +1,76 @@
+services:
+    db:
+        image: postgres:16-alpine
+        container_name: portfolio-ilanlp-db
+        restart: unless-stopped
+        environment:
+            POSTGRES_USER: ${POSTGRES_USER:-portfolio-ilanlp}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-portfolio-ilanlp}
+            POSTGRES_DB: ${POSTGRES_DB:-portfolio-ilanlp}
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+        networks:
+            - portfolio-ilanlp-network
+        ports:
+            - "${DB_PORT:-5432}:${DB_PORT:-5432}"
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-portfolio-ilanlp}"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+
+    backend:
+        build:
+            context: ./Backend
+            dockerfile: Dockerfile
+        container_name: portfolio-ilanlp-backend
+        restart: unless-stopped
+        env_file:
+            - path: ./.env
+        environment:
+            NODE_ENV: production
+            PORT: ${PORT:-3000}
+            DATABASE_URL: postgresql://${POSTGRES_USER:-portfolio-ilanlp}:${POSTGRES_PASSWORD:-portfolio-ilanlp}@db:${DB_PORT:-5432}/${POSTGRES_DB:-velivelo}?schema=public
+            CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:5173}
+            FRONTEND_URL: ${FRONTEND_URL:-http://frontend}
+        depends_on:
+            db:
+                condition: service_healthy
+        networks:
+            - portfolio-ilanlp-network
+        ports:
+            - "${PORT:-3000}:${PORT:-3000}"
+        volumes:
+            - ./Backend/prisma:/app/prisma
+            - ./Backend/uploads:/app/uploads
+        healthcheck:
+            test: ["CMD", "wget", "-qO-", "http://localhost:3000/api/health"]
+            interval: 30s
+            timeout: 5s
+            retries: 3
+            start_period: 15s
+
+    frontend:
+        build:
+            context: ./Frontend
+            dockerfile: Dockerfile
+            args:
+                VITE_API_URL: /api
+        container_name: portfolio-ilanlp-frontend
+        restart: unless-stopped
+        depends_on:
+            backend:
+                condition: service_healthy
+        networks:
+            - portfolio-ilanlp-network
+        ports:
+            - "${FRONTEND_HOST_PORT:-5173}:${FRONTEND_CONTAINER_PORT:-80}"
+
+networks:
+    portfolio-ilanlp-network:
+        driver: bridge
+        name: portfolio-ilanlp-network
+
+volumes:
+    postgres_data:
+        name: portfolio-ilanlp-postgres-data
