@@ -1,24 +1,38 @@
 import { useState } from 'react';
 import { SEO, PageHeader } from '@/components/index.ts';
+import { sendContact } from '@/services/api.ts';
 import './Contact.css';
 
-export default function Contact() {
-    const [submitted, setSubmitted] = useState(false);
+type FormStatus = 'idle' | 'loading' | 'success' | 'error';
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+export default function Contact() {
+    const [status, setStatus] = useState<FormStatus>('idle');
+    const [errorMessage, setErrorMessage] = useState<string>('');
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const form = e.currentTarget;
         const data = new FormData(form);
 
-        // Build a mailto link as a simple contact mechanism (no backend route needed)
-        const subject = encodeURIComponent(String(data.get('subject') ?? 'Contact'));
-        const body = encodeURIComponent(
-            `De : ${data.get('name')}\nEmail : ${data.get('email')}\n\n${data.get('message')}`,
-        );
+        const payload = {
+            name: String(data.get('name') ?? ''),
+            email: String(data.get('email') ?? ''),
+            subject: String(data.get('subject') ?? ''),
+            message: String(data.get('message') ?? ''),
+        };
 
-        window.location.href = `mailto:ilanlp.pro@gmail.com?subject=${subject}&body=${body}`;
-        setSubmitted(true);
-        form.reset();
+        setStatus('loading');
+        setErrorMessage('');
+
+        try {
+            await sendContact(payload);
+            setStatus('success');
+            form.reset();
+        } catch (err: unknown) {
+            const message = err instanceof Error ? err.message : 'Une erreur est survenue. Veuillez réessayer';
+            setErrorMessage(message);
+            setStatus('error');
+        }
     };
 
     return (
@@ -26,9 +40,15 @@ export default function Contact() {
             <SEO title="Contact" description="Contacter Ilan LP" />
             <PageHeader title="Contact" subtitle="Un projet, une mission ou une opportunité de stage ? Écrivez-moi, je vous répondrai avec plaisir !" />
 
-            {submitted && (
+            {status === 'success' && (
                 <div className="contact__success">
-                    Votre client mail s'est ouvert avec le message pré-rempli. Merci !
+                    Votre message a bien été envoyé ! Je vous répondrai dans les plus brefs délais
+                </div>
+            )}
+
+            {status === 'error' && (
+                <div className="contact__error">
+                    {errorMessage}
                 </div>
             )}
 
@@ -89,8 +109,12 @@ export default function Contact() {
                     />
                 </div>
 
-                <button type="submit" className="btn btn--primary contact__submit">
-                    Envoyer
+                <button
+                    type="submit"
+                    className="btn btn--primary contact__submit"
+                    disabled={status === 'loading'}
+                >
+                    {status === 'loading' ? 'Envoi en cours...' : 'Envoyer'}
                 </button>
             </form>
         </div>

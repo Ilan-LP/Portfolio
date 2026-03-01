@@ -9,7 +9,7 @@ export default function News() {
     return (
         <div className="page">
             <SEO title="Actualités" description="Actualités d'Ilan LP" />
-            <PageHeader title="Actualités" subtitle="Ce qui se passe en ce moment : nouveaux projets, certifications et autres annonces importantes." />
+            <PageHeader title="Actualités" subtitle="Ce qui se passe en ce moment : nouveaux projets, certifications et autres annonces importantes" />
 
             {loading && <Loader fullPage />}
             {error && <ErrorState message={error} status={status} onRetry={refetch} />}
@@ -28,7 +28,7 @@ export default function News() {
                 </div>
             )}
             {data?.length === 0 && (
-                <p className="empty-state">Aucune actualité pour le moment.</p>
+                <p className="empty-state">Aucune actualité pour le moment</p>
             )}
         </div>
     );

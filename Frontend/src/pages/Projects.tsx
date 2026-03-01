@@ -29,7 +29,7 @@ export default function Projects() {
                 </div>
             )}
             {data?.length === 0 && (
-                <p className="empty-state">Aucun projet pour le moment.</p>
+                <p className="empty-state">Aucun projet pour le moment</p>
             )}
         </div>
     );

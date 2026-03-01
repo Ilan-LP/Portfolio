@@ -29,7 +29,7 @@ export default function Education() {
                 </div>
             )}
             {data?.length === 0 && (
-                <p className="empty-state">Aucune formation pour le moment.</p>
+                <p className="empty-state">Aucune formation pour le moment</p>
             )}
         </div>
     );

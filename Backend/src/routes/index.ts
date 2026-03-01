@@ -6,6 +6,7 @@ import experienceRouter from './experience';
 import newsRouter from './news';
 import skillRouter from './skill';
 import techStackRouter from './techstack';
+import contactRouter from './contact';
 
 const router = Router();
 
@@ -26,6 +27,7 @@ router.get('/', (_req: Request, res: Response) => {
             '/skills/:id': 'Get a skill by ID',
             '/tech-stacks': 'List all tech stacks',
             '/tech-stacks/:id': 'Get a tech stack by ID',
+            '/contact': 'Send a contact email (POST)',
         },
     });
 });
@@ -37,6 +39,7 @@ router.use('/', experienceRouter);
 router.use('/', newsRouter);
 router.use('/', skillRouter);
 router.use('/', techStackRouter);
+router.use('/', contactRouter);
 
 export default router;
 

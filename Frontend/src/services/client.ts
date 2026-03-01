@@ -10,8 +10,8 @@ export class ApiError extends Error {
     }
 }
 
-async function request<T>(endpoint: string): Promise<T> {
-    const res = await fetch(`${API_BASE}${endpoint}`);
+async function request<T>(endpoint: string, options?: RequestInit): Promise<T> {
+    const res = await fetch(`${API_BASE}${endpoint}`, options);
 
     if (!res.ok) {
         const body = await res.json().catch(() => ({ error: 'Erreur inconnue' }));
@@ -23,4 +23,10 @@ async function request<T>(endpoint: string): Promise<T> {
 
 export const api = {
     get: <T>(endpoint: string) => request<T>(endpoint),
+    post: <T>(endpoint: string, body: unknown) =>
+        request<T>(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+        }),
 };

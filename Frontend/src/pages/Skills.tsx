@@ -1,9 +1,13 @@
 import { useFetch } from '@/hooks/useFetch.ts';
 import { getSkills, getTechStacks } from '@/services/api.ts';
 import { SEO, PageHeader, Loader, ErrorState, Badge } from '@/components/index.ts';
+import { useTheme } from '@/hooks/useTheme.tsx';
+import { getIconFilter } from '@/utils/index.ts';
 import './Skills.css';
 
 export default function Skills() {
+    const { theme } = useTheme();
+    const isDark = theme === 'dark';
     const skills = useFetch(() => getSkills(), []);
     const techStacks = useFetch(() => getTechStacks(), []);
 
@@ -36,7 +40,7 @@ export default function Skills() {
             <SEO title="Compétences" description="Compétences techniques d'Ilan LP" />
             <PageHeader
                 title="Compétences"
-                subtitle="Un aperçu de mes compétences techniques, classées par catégorie pour une lecture facile."
+                subtitle="Un aperçu de mes compétences techniques, classées par catégorie pour une lecture facile"
             />
 
             {loading && <Loader fullPage />}
@@ -62,6 +66,7 @@ export default function Skills() {
                                                 alt=""
                                                 width={24}
                                                 height={24}
+                                                style={{ filter: getIconFilter(undefined, isDark) }}
                                             />
                                         )}
                                         <div className="skill-card__info">

@@ -39,3 +39,13 @@ export const getSkill = (id: number) => api.get<Skill>(`/skills/${id}`);
 // ── Tech Stack ──
 export const getTechStacks = () => api.get<TechStack[]>('/tech-stacks');
 export const getTechStack = (id: number) => api.get<TechStack>(`/tech-stacks/${id}`);
+
+// ── Contact ──
+export interface ContactPayload {
+    name: string;
+    email: string;
+    subject: string;
+    message: string;
+}
+export const sendContact = (payload: ContactPayload) =>
+    api.post<{ message: string }>('/contact', payload);

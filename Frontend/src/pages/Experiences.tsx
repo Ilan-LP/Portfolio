@@ -32,7 +32,7 @@ export default function Experiences() {
                 </div>
             )}
             {data?.length === 0 && (
-                <p className="empty-state">Aucune expérience pour le moment.</p>
+                <p className="empty-state">Aucune expérience pour le moment</p>
             )}
         </div>
     );

@@ -9,8 +9,8 @@ WORKDIR /app
 # Copy dependency manifests
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install --production=false
+# Install dependencies (ci is faster and respects lockfile exactly)
+RUN npm ci --loglevel=error
 
 # Copy source code
 COPY . .

@@ -28,7 +28,6 @@ export default function ProjectDetail() {
                     <Badge label={data.status.name} />
                 </div>
                 <h1 className="project-detail__title">{data.title}</h1>
-                <p className="project-detail__short">{data.descriptionShort}</p>
 
                 <div className="project-detail__links">
                     {data.githubUrl && (
