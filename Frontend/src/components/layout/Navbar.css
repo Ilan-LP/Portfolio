@@ -75,7 +75,6 @@
     background: var(--color-surface);
 }
 
-/* Burger menu (mobile only) */
 .navbar__burger {
     display: none;
     flex-direction: column;

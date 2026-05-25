@@ -3,35 +3,6 @@ import { prisma } from '../lib/prisma';
 
 const router = Router();
 
-/**
- * @openapi
- * /tech-stacks:
- *   get:
- *     tags: [TechStacks]
- *     summary: Get all tech stacks
- *     description: Returns a list of all tech stacks ordered alphabetically.
- *     responses:
- *       200:
- *         description: List of tech stacks
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/TechStack'
- *       404:
- *         description: No tech stacks found
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- */
 router.get('/tech-stacks', async (_req: Request, res: Response) => {
     try {
         const techStacks = await prisma.techStack.findMany({
@@ -45,7 +16,7 @@ router.get('/tech-stacks', async (_req: Request, res: Response) => {
             orderBy: { name: 'asc' },
         });
 
-        if (!techStacks || techStacks.length === 0) {
+        if (techStacks.length === 0) {
             return res.status(404).json({ error: 'No tech stacks found' });
         }
 
@@ -56,38 +27,6 @@ router.get('/tech-stacks', async (_req: Request, res: Response) => {
     }
 });
 
-/**
- * @openapi
- * /tech-stacks/{id}:
- *   get:
- *     tags: [TechStacks]
- *     summary: Get a tech stack by ID
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *     responses:
- *       200:
- *         description: TechStack detail
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/TechStackDetail'
- *       404:
- *         description: Tech stack not found
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- */
 router.get('/tech-stacks/:id', async (req: Request, res: Response) => {
     const { id } = req.params;
     try {

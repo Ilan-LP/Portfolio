@@ -3,35 +3,6 @@ import { prisma } from '../lib/prisma';
 
 const router = Router();
 
-/**
- * @openapi
- * /experiences:
- *   get:
- *     tags: [Experiences]
- *     summary: Get all experiences
- *     description: Returns a list of all enabled experiences with summary information.
- *     responses:
- *       200:
- *         description: List of experiences
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/ExperienceSummary'
- *       404:
- *         description: No experiences found
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- */
 router.get('/experiences', async (_req: Request, res: Response) => {
     try {
         const experiences = await prisma.experience.findMany({
@@ -52,7 +23,7 @@ router.get('/experiences', async (_req: Request, res: Response) => {
             orderBy: { startedAt: 'desc' },
         });
 
-        if (!experiences || experiences.length === 0) {
+        if (experiences.length === 0) {
             return res.status(404).json({ error: 'No experiences found' });
         }
 
@@ -63,38 +34,6 @@ router.get('/experiences', async (_req: Request, res: Response) => {
     }
 });
 
-/**
- * @openapi
- * /experiences/{id}:
- *   get:
- *     tags: [Experiences]
- *     summary: Get an experience by ID
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *     responses:
- *       200:
- *         description: Experience detail
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ExperienceDetail'
- *       404:
- *         description: Experience not found
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- */
 router.get('/experiences/:id', async (req: Request, res: Response) => {
     const { id } = req.params;
     try {

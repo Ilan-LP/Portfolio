@@ -14,6 +14,7 @@ export default function Footer() {
                     <p className="footer__copy">&copy; {year} Ilan Leroux Pinchinat — Tous droits réservés</p>
                 </div>
                 <nav className="footer__nav">
+                    <Link to="/a-propos">À propos</Link>
                     <Link to="/projets">Projets</Link>
                     <Link to="/competences">Compétences</Link>
                     <Link to="/experiences">Expériences</Link>

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useFetch } from '@/hooks/useFetch.ts';
-import { getProjects, getExperiences, getNewsList } from '@/services/api.ts';
+import { getProjects, getExperiences, getGithubRepos } from '@/services/api.ts';
 import { SEO, Loader, ErrorState, Card } from '@/components/index.ts';
 import { formatDateRange, formatDate } from '@/utils/date.ts';
 import './Home.css';
@@ -8,7 +8,7 @@ import './Home.css';
 export default function Home() {
     const projects = useFetch(() => getProjects(), []);
     const experiences = useFetch(() => getExperiences(), []);
-    const news = useFetch(() => getNewsList(), []);
+    const repos = useFetch(() => getGithubRepos(), []);
 
     return (
         <div className="page home">
@@ -17,7 +17,6 @@ export default function Home() {
                 description="Ilan LP — Développeur Web & IA. Étudiant et auto-entrepreneur disponible pour stages et missions"
             />
 
-            {/* Hero */}
             <section className="home__hero">
                 <h1 className="home__hero-title">
                     Je code le Web.
@@ -34,39 +33,54 @@ export default function Home() {
                     <Link to="/contact" className="btn btn--ghost">
                         Me contacter
                     </Link>
+                    <Link to="/a-propos" className="btn btn--ghost">
+                        En savoir plus
+                    </Link>
                 </div>
             </section>
 
-            {/* Dernières Actus */}
             <section className="home__section">
                 <div className="home__section-header">
-                    <h2 className="home__section-title">Dernières actualités</h2>
+                    <h2 className="home__section-title">Projets GitHub récents</h2>
                     <Link to="/actualites" className="home__section-link">
                         Voir tout →
                     </Link>
                 </div>
 
-                {news.loading && <Loader />}
-                {news.error && (
-                    <ErrorState message={news.error} status={news.status} onRetry={news.refetch} />
+                {repos.loading && <Loader />}
+                {repos.error && (
+                    <ErrorState message={repos.error} status={repos.status} onRetry={repos.refetch} />
                 )}
-                {news.data && (
+                {repos.data && (
                     <div className="card-grid">
-                        {news.data.slice(0, 3).map((n) => (
-                            <Card
-                                key={n.id}
-                                to={`/actualites/${n.id}`}
-                                title={n.title}
-                                description={n.descriptionShort}
-                                media={n.mainMedia}
-                                meta={formatDate(n.publishedAt)}
-                            />
+                        {repos.data.slice(0, 3).map((repo) => (
+                            <a
+                                key={repo.name}
+                                href={repo.html_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="card"
+                            >
+                                <div className="card__body">
+                                    <div className="card__header">
+                                        <h3 className="card__title">{repo.name}</h3>
+                                        {repo.language && (
+                                            <span className="card__badge">{repo.language}</span>
+                                        )}
+                                    </div>
+                                    <p className="card__meta">
+                                        ★ {repo.stargazers_count} · Mis à jour le {formatDate(repo.updated_at)}
+                                    </p>
+                                    {repo.description && (
+                                        <p className="card__desc">{repo.description}</p>
+                                    )}
+                                </div>
+                            </a>
                         ))}
                     </div>
                 )}
             </section>
 
-            {/* Projets récents */}
             <section className="home__section">
                 <div className="home__section-header">
                     <h2 className="home__section-title">Projets récents</h2>
@@ -96,7 +110,6 @@ export default function Home() {
                 )}
             </section>
 
-            {/* Expériences */}
             <section className="home__section">
                 <div className="home__section-header">
                     <h2 className="home__section-title">Expériences</h2>
@@ -124,6 +137,29 @@ export default function Home() {
                         ))}
                     </div>
                 )}
+            </section>
+
+            <section className="home__section">
+                <div className="home__section-header">
+                    <h2 className="home__section-title">Mon CV</h2>
+                </div>
+                <div className="card-grid">
+                    <div className="card" style={{ gridColumn: '1 / -1' }}>
+                        <img
+                            src="/api/cv-preview"
+                            alt="Aperçu du CV"
+                            className="w-full object-cover h-64 md:h-80"
+                        />
+                        <div className="!p-6 flex flex-wrap justify-center gap-3">
+                            <a href="/api/cv" download className="btn btn--primary">
+                                Télécharger mon CV
+                            </a>
+                            <a href="/api/cv/view" target="_blank" rel="noopener noreferrer" className="btn btn--ghost">
+                                Voir le CV
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </section>
         </div>
     );

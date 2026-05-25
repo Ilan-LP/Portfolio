@@ -1,6 +1,6 @@
 import { useFetch } from '@/hooks/useFetch.ts';
-import { getSkills, getTechStacks } from '@/services/api.ts';
-import { SEO, PageHeader, Loader, ErrorState, Badge } from '@/components/index.ts';
+import { getSkills, getTechStacks, getLearningJourney } from '@/services/api.ts';
+import { SEO, PageHeader, Loader, ErrorState, Badge, JourneyCard } from '@/components/index.ts';
 import { useTheme } from '@/hooks/useTheme.tsx';
 import { getIconFilter } from '@/utils/index.ts';
 import './Skills.css';
@@ -10,10 +10,10 @@ export default function Skills() {
     const isDark = theme === 'dark';
     const skills = useFetch(() => getSkills(), []);
     const techStacks = useFetch(() => getTechStacks(), []);
+    const journey = useFetch(() => getLearningJourney(), []);
 
-    const loading = skills.loading || techStacks.loading;
+    const loading = skills.loading || techStacks.loading || journey.loading;
 
-    // Group skills by category
     const skillsByCategory = skills.data?.reduce(
         (acc, s) => {
             const cat = s.category.name;
@@ -24,7 +24,6 @@ export default function Skills() {
         {} as Record<string, typeof skills.data>,
     );
 
-    // Group tech stacks by category
     const techByCategory = techStacks.data?.reduce(
         (acc, t) => {
             const cat = t.category.name;
@@ -40,7 +39,7 @@ export default function Skills() {
             <SEO title="Compétences" description="Compétences techniques d'Ilan LP" />
             <PageHeader
                 title="Compétences"
-                subtitle="Un aperçu de mes compétences techniques, classées par catégorie pour une lecture facile"
+                subtitle="Un aperçu de mes compétences techniques et de mon parcours d'apprentissage cette année"
             />
 
             {loading && <Loader fullPage />}
@@ -49,7 +48,17 @@ export default function Skills() {
                 <ErrorState message={skills.error} status={skills.status} onRetry={skills.refetch} />
             )}
 
-            {/* Skills */}
+            {journey.data && journey.data.length > 0 && (
+                <div className="skills__section">
+                    <h2 className="skills__heading">Parcours d'apprentissage</h2>
+                    <div className="journey-grid">
+                        {journey.data.map((entry) => (
+                            <JourneyCard key={entry.id} entry={entry} />
+                        ))}
+                    </div>
+                </div>
+            )}
+
             {skillsByCategory && (
                 <div className="skills__section">
                     <h2 className="skills__heading">Compétences</h2>
@@ -66,7 +75,7 @@ export default function Skills() {
                                                 alt=""
                                                 width={24}
                                                 height={24}
-                                                style={{ filter: getIconFilter(undefined, isDark) }}
+                                                style={{ filter: getIconFilter(s.color, isDark) }}
                                             />
                                         )}
                                         <div className="skill-card__info">
@@ -81,7 +90,6 @@ export default function Skills() {
                 </div>
             )}
 
-            {/* Tech Stack */}
             {techByCategory && (
                 <div className="skills__section">
                     <h2 className="skills__heading">Stack Technique</h2>

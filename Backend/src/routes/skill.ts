@@ -3,35 +3,6 @@ import { prisma } from '../lib/prisma';
 
 const router = Router();
 
-/**
- * @openapi
- * /skills:
- *   get:
- *     tags: [Skills]
- *     summary: Get all skills
- *     description: Returns a list of all skills ordered alphabetically.
- *     responses:
- *       200:
- *         description: List of skills
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Skill'
- *       404:
- *         description: No skills found
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- */
 router.get('/skills', async (_req: Request, res: Response) => {
     try {
         const skills = await prisma.skill.findMany({
@@ -47,7 +18,7 @@ router.get('/skills', async (_req: Request, res: Response) => {
             orderBy: { name: 'asc' },
         });
 
-        if (!skills || skills.length === 0) {
+        if (skills.length === 0) {
             return res.status(404).json({ error: 'No skills found' });
         }
 
@@ -58,38 +29,6 @@ router.get('/skills', async (_req: Request, res: Response) => {
     }
 });
 
-/**
- * @openapi
- * /skills/{id}:
- *   get:
- *     tags: [Skills]
- *     summary: Get a skill by ID
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *     responses:
- *       200:
- *         description: Skill detail
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/SkillDetail'
- *       404:
- *         description: Skill not found
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- */
 router.get('/skills/:id', async (req: Request, res: Response) => {
     const { id } = req.params;
     try {

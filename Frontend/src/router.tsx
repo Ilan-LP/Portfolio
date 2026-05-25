@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import { Layout } from '@/components/index.ts';
 import {
     Home,
+    About,
     Projects,
     ProjectDetail,
     Skills,
@@ -20,6 +21,7 @@ export const router = createBrowserRouter([
         element: <Layout />,
         children: [
             { index: true, element: <Home /> },
+            { path: 'a-propos', element: <About /> },
             { path: 'projets', element: <Projects /> },
             { path: 'projets/:id', element: <ProjectDetail /> },
             { path: 'competences', element: <Skills /> },

@@ -3,35 +3,6 @@ import { prisma } from '../lib/prisma';
 
 const router = Router();
 
-/**
- * @openapi
- * /projects:
- *   get:
- *     tags: [Projects]
- *     summary: Get all projects
- *     description: Returns a list of all enabled projects with their summary information.
- *     responses:
- *       200:
- *         description: List of projects
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/ProjectSummary'
- *       404:
- *         description: No projects found
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- */
 router.get('/projects', async (_req: Request, res: Response) => {
     try {
         const projects = await prisma.project.findMany({
@@ -56,9 +27,9 @@ router.get('/projects', async (_req: Request, res: Response) => {
             where: { enabled: true },
             orderBy: { startedAt: 'desc' },
         });
-        if (!projects || projects.length === 0) {
+        if (projects.length === 0) {
             return res.status(404).json({ error: 'No projects found' });
-        }   
+        }
 
         res.json(projects);
     } catch (error) {
@@ -67,38 +38,6 @@ router.get('/projects', async (_req: Request, res: Response) => {
     }
 });
 
-/**
- * @openapi
- * /projects/{id}:
- *   get:
- *     tags: [Projects]
- *     summary: Get a project by ID
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *     responses:
- *       200:
- *         description: Project detail
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ProjectDetail'
- *       404:
- *         description: Project not found
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- */
 router.get('/projects/:id', async (req: Request, res: Response) => {
     const { id } = req.params;
     try {

@@ -9,3 +9,4 @@ export { default as Card } from './ui/Card.tsx';
 export { default as SEO } from './ui/SEO.tsx';
 export { default as RetroGrid } from './ui/retro-grid.tsx';
 export { default as Particles } from './ui/particles.tsx';
+export { default as JourneyCard } from './ui/JourneyCard.tsx';

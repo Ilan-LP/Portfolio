@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ilanlp.nexus-i.fr/sitemap.xml

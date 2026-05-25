@@ -49,7 +49,6 @@ const options: swaggerJsdoc.Options = {
                         name: { type: 'string' },
                     },
                 },
-                // Project
                 ProjectSummary: {
                     type: 'object',
                     properties: {
@@ -102,7 +101,6 @@ const options: swaggerJsdoc.Options = {
                         },
                     ],
                 },
-                // Experience
                 ExperienceSummary: {
                     type: 'object',
                     properties: {
@@ -171,7 +169,6 @@ const options: swaggerJsdoc.Options = {
                         },
                     ],
                 },
-                // Education
                 EducationSummary: {
                     type: 'object',
                     properties: {
@@ -248,7 +245,6 @@ const options: swaggerJsdoc.Options = {
                         },
                     ],
                 },
-                // News
                 NewsSummary: {
                     type: 'object',
                     properties: {
@@ -280,7 +276,6 @@ const options: swaggerJsdoc.Options = {
                         },
                     ],
                 },
-                // Skill
                 SkillSummary: {
                     type: 'object',
                     properties: {
@@ -330,7 +325,6 @@ const options: swaggerJsdoc.Options = {
                         },
                     ],
                 },
-                // TechStack
                 TechStackSummary: {
                     type: 'object',
                     properties: {

@@ -1,7 +1,3 @@
-/**
- * Parses a hex color string (#RRGGBB or #RGB) into HSL components.
- * Returns [hue (0-360), saturation (0-100), lightness (0-100)].
- */
 function hexToHsl(hex: string): [number, number, number] {
     let h = hex.slice(1);
     if (h.length === 3) h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
@@ -35,14 +31,6 @@ function hexToHsl(hex: string): [number, number, number] {
     return [Math.round(hue * 360), Math.round(sat * 100), Math.round(l * 100)];
 }
 
-/**
- * Adapts a hex color so it remains legible against the current theme background.
- *
- * - Dark theme  : if the color is too dark (L < 45) it is lightened to L = 65.
- * - Light theme : if the color is too light (L > 60) it is darkened to L = 35.
- *
- * The hue and saturation are preserved so the color identity stays the same.
- */
 export function adaptColorToTheme(color: string | undefined, isDark: boolean): string | undefined {
     if (!color) return undefined;
 
@@ -58,24 +46,13 @@ export function adaptColorToTheme(color: string | undefined, isDark: boolean): s
         newL = 35;
     }
 
-    if (newL === l) return clean; // no change needed
+    if (newL === l) return clean;
 
     return `hsl(${h}, ${s}%, ${newL}%)`;
 }
 
-/**
- * Returns a CSS filter string to make an icon image legible against the
- * current theme background, using the icon's associated brand color as a hint.
- *
- * - Dark theme + dark color (L < 45) : brighten the icon (brightness + invert-aware)
- * - Light theme + light color (L > 65): darken the icon
- * - Otherwise: no filter needed
- *
- * Falls back to a generic theme-based filter when no color is provided.
- */
 export function getIconFilter(color: string | undefined, isDark: boolean): string | undefined {
     if (!color) {
-        // No color hint: apply a conservative generic filter
         return isDark ? 'brightness(1.6)' : undefined;
     }
 
@@ -87,14 +64,12 @@ export function getIconFilter(color: string | undefined, isDark: boolean): strin
     const [, , l] = hexToHsl(clean);
 
     if (isDark && l < 45) {
-        // Very dark icon on dark background → brighten strongly
-        return l < 15 ? 'brightness(0) invert(1)' : 'brightness(2)';
+        return 'brightness(0) invert(1)';
     }
 
     if (!isDark && l > 65) {
-        // Very light icon on light background → darken
         return l > 85 ? 'brightness(0)' : 'brightness(0.3)';
     }
 
-    return undefined; // icon already legible
+    return undefined;
 }

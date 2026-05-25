@@ -177,7 +177,6 @@ export const Particles: React.FC<ParticlesProps> = ({
   const resolveColorToRgb = (col: string): number[] => {
     let c = col
 
-    // Resolve CSS variable like `var(--color-accent)`
     if (c.startsWith("var(")) {
       const varName = c.replace(/var\(|\)|\s/g, "")
       if (canvasContainerRef.current) {
@@ -189,7 +188,6 @@ export const Particles: React.FC<ParticlesProps> = ({
       c = c.trim()
     }
 
-    // Handle rgb(...) strings
     if (c.startsWith("rgb")) {
       const nums = c.match(/\d+/g)
       if (nums && nums.length >= 3) {
@@ -197,10 +195,9 @@ export const Particles: React.FC<ParticlesProps> = ({
       }
     }
 
-    // Fallback to hex parser
     try {
       return hexToRgb(c)
-    } catch (e) {
+    } catch {
       return [255, 255, 255]
     }
   }
@@ -230,8 +227,7 @@ export const Particles: React.FC<ParticlesProps> = ({
 
   const drawParticles = () => {
     clearContext()
-    const particleCount = quantity
-    for (let i = 0; i < particleCount; i++) {
+    for (let i = 0; i < quantity; i++) {
       const circle = circleParams()
       drawCircle(circle)
     }
@@ -251,12 +247,11 @@ export const Particles: React.FC<ParticlesProps> = ({
   const animate = () => {
     clearContext()
     circles.current.forEach((circle: Circle, i: number) => {
-      // Handle the alpha value
       const edge = [
-        circle.x + circle.translateX - circle.size, // distance from left edge
-        canvasSize.current.w - circle.x - circle.translateX - circle.size, // distance from right edge
-        circle.y + circle.translateY - circle.size, // distance from top edge
-        canvasSize.current.h - circle.y - circle.translateY - circle.size, // distance from bottom edge
+        circle.x + circle.translateX - circle.size,
+        canvasSize.current.w - circle.x - circle.translateX - circle.size,
+        circle.y + circle.translateY - circle.size,
+        canvasSize.current.h - circle.y - circle.translateY - circle.size,
       ]
       const closestEdge = edge.reduce((a, b) => Math.min(a, b))
       const remapClosestEdge = Number.parseFloat(remapValue(closestEdge, 0, 20, 0, 1).toFixed(2))
@@ -277,19 +272,15 @@ export const Particles: React.FC<ParticlesProps> = ({
 
       drawCircle(circle, true)
 
-      // circle gets out of the canvas
       if (
         circle.x < -circle.size ||
         circle.x > canvasSize.current.w + circle.size ||
         circle.y < -circle.size ||
         circle.y > canvasSize.current.h + circle.size
       ) {
-        // remove the circle from the array
         circles.current.splice(i, 1)
-        // create a new circle
         const newCircle = circleParams()
         drawCircle(newCircle)
-        // update the circle position
       }
     })
     animationRef.current = window.requestAnimationFrame(animate)
@@ -307,7 +298,6 @@ export const Particles: React.FC<ParticlesProps> = ({
         style={{ pointerEvents: "none", touchAction: "pan-y" }}
       />
 
-      {/* Content layer */}
       {children && <div className="relative z-10 h-full w-full">{children}</div>}
     </div>
   )

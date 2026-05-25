@@ -27,8 +27,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
             if (meta) {
                 meta.setAttribute('content', theme === 'light' ? '#ffffff' : '#0a0a0a');
             }
-        } catch (e) {
-            // ignore
+        } catch {
         }
     }, [theme]);
 

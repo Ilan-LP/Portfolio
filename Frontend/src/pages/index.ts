@@ -1,4 +1,5 @@
 export { default as Home } from './Home.tsx';
+export { default as About } from './About.tsx';
 export { default as Projects } from './Projects.tsx';
 export { default as ProjectDetail } from './ProjectDetail.tsx';
 export { default as Skills } from './Skills.tsx';

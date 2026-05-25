@@ -30,6 +30,7 @@ model Project {
     projectMedias ProjectMedia[]
     projectTechStacks ProjectTechStack[]
     projectSkills ProjectSkill[]
+    learningJourneyProjects LearningJourneyProject[]
 
     @@index([statusId])
     @@index([mainProjectMediaId])
@@ -431,3 +432,54 @@ enum MediaType {
     VIDEO
     DOCUMENT
 }
+
+model LearningJourneyEntry {
+    id          Int      @id @default(autoincrement())
+    domain      String   @unique
+    iconUrl     String
+    color       String
+    before      String
+    after       String
+    order       Int      @default(0)
+
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    journeyProjects LearningJourneyProject[]
+}
+
+model PhilosophyPoint {
+    id      Int     @id @default(autoincrement())
+    title   String  @unique
+    body    String
+    order   Int     @default(0)
+    enabled Boolean @default(true)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Hobby {
+    id          Int     @id @default(autoincrement())
+    label       String  @unique
+    icon        String
+    description String
+    order       Int     @default(0)
+    enabled     Boolean @default(true)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model LearningJourneyProject {
+    id        Int @id @default(autoincrement())
+    entryId   Int
+    projectId Int
+
+    entry   LearningJourneyEntry @relation(fields: [entryId], references: [id])
+    project Project              @relation(fields: [projectId], references: [id])
+
+    @@unique([entryId, projectId])
+    @@index([projectId])
+}
+

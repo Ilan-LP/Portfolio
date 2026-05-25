@@ -3,7 +3,7 @@ import { useFetch } from '@/hooks/useFetch.ts';
 import { getEducation } from '@/services/api.ts';
 import { SEO, Loader, ErrorState, Badge } from '@/components/index.ts';
 import { formatDateRange } from '@/utils/date.ts';
-import './ExperienceDetail.css'; /* reuse shared detail styles */
+import './ExperienceDetail.css';
 
 export default function EducationDetail() {
     const { id } = useParams<{ id: string }>();

@@ -3,35 +3,6 @@ import { prisma } from '../lib/prisma';
 
 const router = Router();
 
-/**
- * @openapi
- * /education:
- *   get:
- *     tags: [Education]
- *     summary: Get all education entries
- *     description: Returns a list of all enabled education entries with summary information.
- *     responses:
- *       200:
- *         description: List of education entries
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/EducationSummary'
- *       404:
- *         description: No education entries found
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- */
 router.get('/education', async (_req: Request, res: Response) => {
     try {
         const education = await prisma.education.findMany({
@@ -56,7 +27,7 @@ router.get('/education', async (_req: Request, res: Response) => {
             where: { enabled: true },
             orderBy: { startedAt: 'desc' },
         });
-        if (!education || education.length === 0) {
+        if (education.length === 0) {
             return res.status(404).json({ error: 'No education entries found' });
         }
 
@@ -67,38 +38,6 @@ router.get('/education', async (_req: Request, res: Response) => {
     }
 });
 
-/**
- * @openapi
- * /education/{id}:
- *   get:
- *     tags: [Education]
- *     summary: Get an education entry by ID
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *     responses:
- *       200:
- *         description: Education detail
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/EducationDetail'
- *       404:
- *         description: Education entry not found
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- */
 router.get('/education/:id', async (req: Request, res: Response) => {
     const { id } = req.params;
     try {

@@ -1,4 +1,3 @@
-// ── Media ──
 export interface Media {
     id: number;
     url: string;
@@ -6,14 +5,12 @@ export interface Media {
     type: 'IMAGE' | 'VIDEO' | 'DOCUMENT';
 }
 
-// ── Status ──
 export interface Status {
     id: number;
     name: string;
     description?: string;
 }
 
-// ── TechStack ──
 export interface TechStackCategory {
     id: number;
     name: string;
@@ -28,7 +25,6 @@ export interface TechStack {
     category: TechStackCategory;
 }
 
-// ── Skill ──
 export interface SkillCategory {
     id: number;
     name: string;
@@ -51,7 +47,6 @@ export interface Skill {
     level: SkillLevel;
 }
 
-// ── Project ──
 export interface ProjectSummary {
     id: number;
     title: string;
@@ -71,7 +66,6 @@ export interface ProjectDetail extends ProjectSummary {
     projectSkills: { skill: Skill }[];
 }
 
-// ── Education ──
 export interface School {
     id: number;
     name: string;
@@ -104,7 +98,6 @@ export interface EducationDetail extends EducationSummary {
     educationSkills: { skill: Skill }[];
 }
 
-// ── Experience ──
 export interface Company {
     id: number;
     name: string;
@@ -136,24 +129,43 @@ export interface ExperienceDetail extends ExperienceSummary {
     experienceSkills: { skill: Skill }[];
 }
 
-// ── News ──
-export interface NewsSummary {
-    id: number;
-    title: string;
-    descriptionShort: string;
-    publishedAt: string;
-    mainMedia: Media | null;
+export interface GithubRepo {
+    name: string;
+    description: string;
+    updated_at: string;
+    language: string | null;
+    html_url: string;
+    stargazers_count: number;
 }
 
-export interface NewsDetail extends NewsSummary {
-    descriptionLong: string;
-    status: Status | null;
-    newsMedias: { media: Media }[];
-}
-
-// ── Health ──
 export interface HealthResponse {
     status: string;
     db: string;
     uptime: number;
+}
+
+export interface PhilosophyPoint {
+    id: number;
+    title: string;
+    body: string;
+    order: number;
+}
+
+export interface Hobby {
+    id: number;
+    label: string;
+    icon: string;
+    description: string;
+    order: number;
+}
+
+export interface LearningJourneyEntry {
+    id: number;
+    domain: string;
+    iconUrl: string;
+    color: string;
+    before: string;
+    after: string;
+    order: number;
+    projects: { id: number; title: string }[];
 }

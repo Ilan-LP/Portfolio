@@ -1,0 +1,18 @@
+.skip-link {
+    position: absolute;
+    top: -100%;
+    left: 1rem;
+    padding: 0.5rem 1rem;
+    background: var(--color-text);
+    color: var(--color-bg);
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: 0 0 6px 6px;
+    text-decoration: none;
+    z-index: 200;
+    transition: top 0.15s;
+}
+
+.skip-link:focus {
+    top: 0;
+}

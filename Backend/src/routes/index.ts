@@ -3,10 +3,14 @@ import systemRouter from './system';
 import projectRouter from './project';
 import educationRouter from './education';
 import experienceRouter from './experience';
-import newsRouter from './news';
+import githubRouter from './github';
 import skillRouter from './skill';
 import techStackRouter from './techstack';
 import contactRouter from './contact';
+import photoRouter from './photo';
+import cvRouter from './cv';
+import journeyRouter from './journey';
+import aboutRouter from './about';
 
 const router = Router();
 
@@ -21,8 +25,7 @@ router.get('/', (_req: Request, res: Response) => {
             '/education/:id': 'Get an education entry by ID',
             '/experiences': 'List all experiences',
             '/experiences/:id': 'Get an experience by ID',
-            '/news': 'List all news',
-            '/news/:id': 'Get a news item by ID',
+            '/github/repos': 'List public GitHub repositories',
             '/skills': 'List all skills',
             '/skills/:id': 'Get a skill by ID',
             '/tech-stacks': 'List all tech stacks',
@@ -36,10 +39,14 @@ router.use('/', systemRouter);
 router.use('/', projectRouter);
 router.use('/', educationRouter);
 router.use('/', experienceRouter);
-router.use('/', newsRouter);
+router.use('/', githubRouter);
 router.use('/', skillRouter);
 router.use('/', techStackRouter);
 router.use('/', contactRouter);
+router.use('/', photoRouter);
+router.use('/', cvRouter);
+router.use('/', journeyRouter);
+router.use('/', aboutRouter);
 
 export default router;
 

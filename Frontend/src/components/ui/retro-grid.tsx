@@ -1,17 +1,11 @@
 import { cn } from "../../lib/utils"
 
 export interface RetroGridProps {
-  /** Additional CSS classes */
   className?: string
-  /** Content to render on top of the grid */
   children?: React.ReactNode
-  /** Rotation angle of the grid in degrees */
   angle?: number
-  /** Grid cell size in pixels */
   cellSize?: number
-  /** Grid opacity value between 0 and 1 */
   opacity?: number
-  /** Grid line color */
   lineColor?: string
 }
 
@@ -25,7 +19,6 @@ export function RetroGrid({
 }: RetroGridProps) {
   return (
     <div className={cn("fixed inset-0 overflow-hidden -z-10", className)} style={{ backgroundColor: `var(--color-bg)` }}>
-      {/* Keyframe animation */}
       <style>{`
         @keyframes retro-grid-scroll {
           0% {
@@ -37,7 +30,6 @@ export function RetroGrid({
         }
       `}</style>
 
-      {/* Perspective container */}
       <div className="pointer-events-none absolute inset-0 [perspective:200px] -z-10" style={{ opacity }}>
         <div className="absolute inset-0" style={{ transform: `rotateX(${angle}deg)` }}>
           <div
@@ -56,7 +48,6 @@ export function RetroGrid({
 
       </div>
 
-      {/* Content layer */}
       {children && <div className="relative z-10 h-full w-full">{children}</div>}
     </div>
   )

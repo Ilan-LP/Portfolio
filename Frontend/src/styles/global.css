@@ -1,7 +1,3 @@
-/* ═══════════════════════════════════════════════════════
-   Global styles — Ollama-inspired minimal portfolio
-   ═══════════════════════════════════════════════════════ */
-
 @import "tailwindcss";
 
 @import "tw-animate-css";
@@ -10,7 +6,6 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* ── CSS Reset ── */
 *,
 *::before,
 *::after {
@@ -19,7 +14,6 @@
     box-sizing: border-box;
 }
 
-/* ── Theme Variables ── */
 :root {
     --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     --radius: 0.625rem;
@@ -56,7 +50,6 @@
     --sidebar-ring: oklch(0.708 0 0);
 }
 
-/* Dark theme (default) */
 [data-theme='dark'] {
     --color-bg: #0a0a0a;
     --color-surface: #141414;
@@ -70,7 +63,6 @@
     color-scheme: dark;
 }
 
-/* Light theme */
 [data-theme='light'] {
     --color-bg: #ffffff;
     --color-surface: #f5f5f5;
@@ -84,7 +76,6 @@
     color-scheme: light;
 }
 
-/* ── Base ── */
 html {
     font-size: 16px;
     -webkit-font-smoothing: antialiased;
@@ -115,7 +106,6 @@ button {
     cursor: pointer;
 }
 
-/* ── Layout ── */
 .layout {
     display: flex;
     flex-direction: column;
@@ -132,7 +122,6 @@ button {
     padding: 2.5rem 1.5rem 4rem;
 }
 
-/* ── Card Grid ── */
 .card-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
@@ -145,14 +134,12 @@ button {
     }
 }
 
-/* ── Badge List ── */
 .badge-list {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
 }
 
-/* ── Media Grid ── */
 .media-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -166,7 +153,6 @@ button {
     object-fit: cover;
 }
 
-/* ── Buttons ── */
 .btn {
     display: inline-flex;
     align-items: center;
@@ -205,7 +191,6 @@ button {
     border-color: var(--color-text-tertiary);
 }
 
-/* ── Footer ── */
 .footer {
     border-top: 1px solid var(--color-border);
     padding: 2.5rem 0;
@@ -253,7 +238,6 @@ button {
     color: var(--color-text);
 }
 
-/* ── Empty state ── */
 .empty-state {
     text-align: center;
     padding: 3rem 1rem;
@@ -261,12 +245,10 @@ button {
     font-size: 0.9375rem;
 }
 
-/* ── Scroll behavior ── */
 html {
     scroll-behavior: smooth;
 }
 
-/* ── Selection ── */
 ::selection {
     background: var(--color-text);
     color: var(--color-bg);

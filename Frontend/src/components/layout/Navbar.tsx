@@ -5,11 +5,12 @@ import './Navbar.css';
 
 const NAV_LINKS = [
     { to: '/', label: 'Accueil' },
+    { to: '/a-propos', label: 'À propos' },
     { to: '/projets', label: 'Projets' },
     { to: '/competences', label: 'Compétences' },
     { to: '/experiences', label: 'Expériences' },
     { to: '/education', label: 'Éducation' },
-    { to: '/actualites', label: 'Actualités' },
+    { to: '/actualites', label: 'Mes Repos' },
     { to: '/contact', label: 'Contact' },
 ];
 
