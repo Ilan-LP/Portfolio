@@ -48,4 +48,10 @@ USER nodejs
 # Expose the port
 EXPOSE 3000
 
-CMD ["sh", "-c", "npx prisma migrate deploy || true; npx prisma db push; npx prisma db seed || true; node dist/index.js"]
+# Sync the schema on start (no formal Prisma migrations exist yet in this
+# project, so `db push` is the current source of truth). It fails closed
+# on the CLI in a non-interactive container instead of silently applying
+# a change that would lose data, which is what we want here. Seeding is
+# NOT run automatically anymore: it's a one-off, run it manually with
+# `docker compose exec backend npx prisma db seed` when you actually need it.
+CMD ["sh", "-c", "npx prisma db push --skip-generate && node dist/index.js"]

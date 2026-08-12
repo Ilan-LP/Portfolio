@@ -11,8 +11,8 @@ services:
             - postgres_data:/var/lib/postgresql/data
         networks:
             - portfolio-ilanlp-network
-        ports:
-            - "${DB_PORT}:5432"
+        # Pas de "ports:" : la base ne doit jamais être joignable depuis
+        # l'hôte ou internet, uniquement depuis le réseau docker interne.
         healthcheck:
             test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
             interval: 10s
@@ -38,8 +38,9 @@ services:
                 condition: service_healthy
         networks:
             - portfolio-ilanlp-network
-        ports:
-            - "${PORT}:3000"
+        # Pas de "ports:" et pas de caddy_net ici : le backend n'est jamais
+        # exposé directement, le frontend nginx proxy /api et /uploads vers
+        # lui en interne (voir Frontend/nginx.conf).
         volumes:
             - ./Backend/prisma:/app/prisma
             - ./Backend/uploads:/app/uploads
@@ -63,13 +64,16 @@ services:
                 condition: service_healthy
         networks:
             - portfolio-ilanlp-network
-        ports:
-            - "${FRONTEND_HOST_PORT}:${FRONTEND_CONTAINER_PORT}"
+            - caddy_net
+        # Pas de "ports:" exposé sur l'hôte : uniquement accessible via
+        # Caddy sur le réseau docker partagé caddy_net.
 
 networks:
     portfolio-ilanlp-network:
         driver: bridge
         name: portfolio-ilanlp-network
+    caddy_net:
+        external: true
 
 volumes:
     postgres_data:
